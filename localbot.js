@@ -24,6 +24,16 @@ connection.connect();
 
 client.on('ready', () => {
     // Database time!
+    connection.query('CREATE DATABASE IF NOT EXISTS Vegas', err => {
+        if (err) {
+            console.error(err)
+        }
+    })
+    connection.query('USE Vegas', err => {
+        if (err) {
+            console.error(err)
+        }
+    })
     connection.query(table_creation, err => {
         if (err) {
             console.error(err)
