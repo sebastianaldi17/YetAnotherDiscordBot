@@ -4,8 +4,8 @@ const mysql = require('mysql');
 const client = new Discord.Client();
 
 const prefix = "$$";
-const balance_check = "SELECT balance FROM USERS WHERE user_id = ?"
-const user_checking = "SELECT * FROM USERS WHERE user_id = ?";
+const balance_check = "SELECT balance FROM users WHERE user_id = ?"
+const user_checking = "SELECT * FROM users WHERE user_id = ?";
 const user_init = "INSERT INTO users VALUES (?, ?)";
 const update_balance = "UPDATE users SET balance = ? WHERE user_id = ?";
 const table_creation = `CREATE TABLE IF NOT EXISTS users (
