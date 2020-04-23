@@ -1,13 +1,13 @@
-const Discord = require('discord.js');
-const mysql = require('mysql');
+const Discord = require('discord.js')
+const mysql = require('mysql')
 
-const client = new Discord.Client();
+const client = new Discord.Client()
 
-const prefix = "$$";
+const prefix = "$$"
 const balance_check = "SELECT balance FROM users WHERE user_id = ?"
-const user_checking = "SELECT * FROM users WHERE user_id = ?";
-const user_init = "INSERT INTO users VALUES (?, ?)";
-const update_balance = "UPDATE users SET balance = ? WHERE user_id = ?";
+const user_checking = "SELECT * FROM users WHERE user_id = ?"
+const user_init = "INSERT INTO users VALUES (?, ?)"
+const update_balance = "UPDATE users SET balance = ? WHERE user_id = ?"
 const table_creation = `CREATE TABLE IF NOT EXISTS users (
     user_id varchar(32) NOT NULL,
     balance int
@@ -19,8 +19,8 @@ const help = `here are all the available commands:
     b / bal / balance: Shows your current balance.
     flip {value} {heads/tails}: Bet your money to gain double or lose all.
 `
-var connection = mysql.createConnection(process.env.JAWSDB_URL);
-connection.connect();
+var connection = mysql.createConnection(process.env.JAWSDB_URL)
+connection.connect()
 
 client.on('ready', () => {
     // Database time!
@@ -29,25 +29,25 @@ client.on('ready', () => {
             console.error(err)
         }
     })
-    console.log('I am ready!');
-});
+    console.log('I am ready!')
+})
 
 client.on('disconnect', event => {
-    connection.end();
+    connection.end()
 })
 
 client.on('message', message => {
-    var content = message.content.split(' ');
+    var content = message.content.split(' ')
     if (content.length > 0) {
         if (content[0] === prefix) {
-            for(let i = 0; i < content.length; i++) {
+            for (let i = 0; i < content.length; i++) {
                 content[i] = content[i].toLowerCase()
             }
-            if(content.length === 1) {
+            if (content.length === 1) {
                 message.reply(help)
             }
             if (content[1] === "ping") {
-                message.reply("Pong!");
+                message.reply("Pong!")
             } else if (content[1] === "init") {
                 connection.query(user_checking, [message.author.id], function (error, results, fields) {
                     if (error) {
@@ -56,7 +56,15 @@ client.on('message', message => {
                         return
                     }
                     if (results.length > 0) {
-                        message.reply("You have initialized your account!")
+                        connection.query(user_init, [message.author.id, 1000], function (error) {
+                            if (error) {
+                                console.log(error)
+                                message.reply("An error occured. Please try again later.")
+                                return
+                            } else {
+                                message.reply("Money reverted back to 1000!")
+                            }
+                        })
                     } else {
                         connection.query(user_init, [message.author.id, 1000], function (error) {
                             if (error) {
@@ -80,7 +88,7 @@ client.on('message', message => {
                         let bal = results[0].balance
                         message.reply(`Your balance is ${bal} credits.`)
                     } else {
-                        message.reply("You have not initialized your account! Initialize with $$ init")
+                        message.reply("You have not initialized your account! Initialize with $$ init.")
                     }
                 })
             } else if (content[1] === "flip") {
@@ -88,7 +96,7 @@ client.on('message', message => {
                     message.reply("Please input the amount you want to bet.")
                 } else {
                     if (isNaN(content[2])) {
-                        message.reply("Please input a valid number")
+                        message.reply("Please input a valid number!")
                     } else {
                         connection.query(balance_check, [message.author.id], function (error, results, fields) {
                             if (error) {
@@ -108,7 +116,7 @@ client.on('message', message => {
                                     if (content[3].toLowerCase() == "tails") bet = "tails"
                                 }
                                 if (current_money < bet_value) {
-                                    message.reply(`You do not have enough money. Your balance is ${current_money} credits, while your bet was ${bet_value} credits`)
+                                    message.reply(`You do not have enough money. Your balance is ${current_money} credits, while your bet was ${bet_value} credits.`)
                                     return
                                 }
                                 let result = Math.random() >= 0.5 ? "heads" : "tails"
@@ -125,7 +133,7 @@ client.on('message', message => {
                                     }
                                 })
                             } else {
-                                message.reply("You have not initialized your account! Initialize with $$ init")
+                                message.reply("You have not initialized your account! Initialize with $$ init.")
                             }
                         })
                     }
@@ -135,6 +143,6 @@ client.on('message', message => {
             return
         }
     }
-});
+})
 
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN)
