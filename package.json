@@ -1,5 +1,5 @@
 {
-    "name": "YetAnotherDiscordBot",
+    "name": "yetanotherdiscordbot",
     "description": "A test bot deployed using heroku. Will add features once it is working.",
     "version": "0.0.0",
     "main": "bot.js",
@@ -7,7 +7,7 @@
         "start": "node bot.js"
     },
     "dependencies": {
-        "discord.js": "11.1.0",
-        "request": "2.81.0"
+        "discord.js": "^12.2.0",
+        "mysql": "^2.18.1"
     }
 }
