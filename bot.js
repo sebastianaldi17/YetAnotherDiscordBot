@@ -56,7 +56,7 @@ client.on('message', message => {
                         return
                     }
                     if (results.length > 0) {
-                        connection.query(user_init, [message.author.id, 1000], function (error) {
+                        connection.query(update_balance, [message.author.id, 1000], function (error) {
                             if (error) {
                                 console.log(error)
                                 message.reply("An error occured. Please try again later.")
@@ -66,7 +66,7 @@ client.on('message', message => {
                             }
                         })
                     } else {
-                        connection.query(update_balance, [message.author.id, 1000], function (error) {
+                        connection.query(user_init, [message.author.id, 1000], function (error) {
                             if (error) {
                                 console.log(error)
                                 message.reply("An error occured. Please try again later.")
